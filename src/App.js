@@ -28,11 +28,11 @@ class App extends Component {
           </Navbar>
 
           <br />
-          <switch>
+          <Switch>
             <Route path='/' Component={Content} exact />
             <Route path='/create' component={Create} exact />
             <Route path='/read' component={Read} exact />
-          </switch>
+          </Switch>
         </div>
       </Router>
     );
