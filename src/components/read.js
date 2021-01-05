@@ -13,7 +13,7 @@ export class Read extends React.Component {
         axios.get('http://localhost:4000/api/movies') //url for back end
             .then(
                 (response) => {
-                    this.setState({ movies: response.data.movies }) //pass data to server
+                    this.setState({ movies: response.data }) //pass data to server
                 }
 
             )
