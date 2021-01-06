@@ -67,13 +67,7 @@ app.get('/api/movies', (req, res) => {
     MovieModel.find((err, data) => {
         res.json(data);
     })
-
-    // res.status(200).json({
-    //     message: "Everything is ok", //Can add multiple data
-    //     movies: mymovies
-    // });
 })
-
 
 app.get('/api/movies/:id', (req, res)=> {
     console.log(req.params.id)
@@ -82,6 +76,15 @@ app.get('/api/movies/:id', (req, res)=> {
     })
 })
 
+app.put('/api/movies/:id', (req, res)=>{
+    console.log("Update Movie:" +  req.params.id)
+    console.log(req.body)
+
+    MovieModel.findByIdAndUpdate(req.params.id, req.body, {new:true},
+        (err,data)=>{
+            res.send(data);
+        })
+})
 
 app.post('/api/movies', (req, res) => {
     console.log('Movie Recieved');

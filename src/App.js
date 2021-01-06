@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Create } from './components/create';
 import { Read } from './components/read';
 import { Content } from './components/content';
+import { Edit } from './components/edit';
 
 
 class App extends Component {
@@ -30,8 +31,10 @@ class App extends Component {
           <br />
           <Switch>
             <Route path='/' Component={Content} exact />
-            <Route path='/create' component={Create} exact />
-            <Route path='/read' component={Read} exact />
+            <Route path='/create' component={Create} />
+            <Route path='/read' component={Read} />
+            <Route path='/edit/:id' component={Edit}></Route>
+
           </Switch>
         </div>
       </Router>
