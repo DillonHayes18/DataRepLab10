@@ -19,98 +19,74 @@ app.use(express.static(path.join(__dirname, '../build')))
 app.use('/static', express.static(path.join(__dirname, 'build//static')))
 
 app.use(bodyParser.urlencoded({ extended: false }))
-
 app.use(bodyParser.json())
 
-const myConnectionString = 'mongodb+srv://dillon:admin@cluster0.8pfhp.mongodb.net/dillon?retryWrites=true&w=majority';
-mongoose.connect(myConnectionString, { useNewUrlParser: true });
+//Setting up mongo db
+const databaseString = 'mongodb+srv://dillon:admin@cluster0.8pfhp.mongodb.net/ShoeDB?retryWrites=true&w=majority';
+mongoose.connect(databaseString, { useNewUrlParser: true });
 
+//Schema for the shoe
 const Schema = mongoose.Schema;
-var movieSchema = new Schema({
-    title: String,
-    year: String,
-    poster: String
+var shoeShcema = new Schema({
+    name: String,
+    brand: String,
+    price: String,
+    image: String
 })
 
-var MovieModel = mongoose.model("movie", movieSchema)
+//Model for the shoe to DB
+var ShoeModel = mongoose.model("shoe", shoeShcema)
 
-app.get('/api/movies', (req, res) => {
-
-    // const mymovies = [
-    //     {
-    //         "Title": "Avengers: Infinity War",
-    //         "Year": "2018",
-    //         "imdbID": "tt4154756",
-    //         "Type": "movie",
-    //         "Poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg"
-    //     },
-    //     {
-    //         "Title": "Captain America: Civil War",
-    //         "Year": "2016",
-    //         "imdbID": "tt3498820",
-    //         "Type": "movie",
-    //         "Poster": "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_SX300.jpg"
-    //     },
-    //     {
-    //         "Title": "World War Z",
-    //         "Year": "2013",
-    //         "imdbID": "tt0816711",
-    //         "Type": "movie",
-    //         "Poster": "https://m.media-amazon.com/images/M/MV5BNDQ4YzFmNzktMmM5ZC00MDZjLTk1OTktNDE2ODE4YjM2MjJjXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg"
-    //     }
-    //     , {
-    //         "Title": "War of the Worlds",
-    //         "Year": "2005",
-    //         "imdbID": "tt0407304",
-    //         "Type": "movie",
-    //         "Poster": "https://m.media-amazon.com/images/M/MV5BNDUyODAzNDI1Nl5BMl5BanBnXkFtZTcwMDA2NDAzMw@@._V1_SX300.jpg"
-    //     }
-    // ];
-
-    MovieModel.find((err, data) => {
+app.get('/api/shoes', (req, res) => {
+    ShoeModel.find((err, data) => {
         res.json(data);
     })
 })
 
-app.get('/api/movies/:id', (req, res) => {
+//Finding the shoe by ID
+app.get('/api/shoes/:id', (req, res) => {
     console.log(req.params.id)
-    MovieModel.findById(req.params.id, (err, data) => {
+    ShoeModel.findById(req.params.id, (err, data) => {
         res.json(data)
     })
 })
 
-app.put('/api/movies/:id', (req, res) => {
-    console.log("Update Movie:" + req.params.id)
+//Updating by ID
+app.put('/api/shoes/:id', (req, res) => {
+    console.log("Update Shoe:" + req.params.id)
     console.log(req.body)
 
-    MovieModel.findByIdAndUpdate(req.params.id, req.body, { new: true },
+    ShoeModel.findByIdAndUpdate(req.params.id, req.body, { new: true },
         (err, data) => {
             res.send(data);
         })
 })
 
-app.delete('/api/movies/:id', (req, res) => {
-    console.log("Delete Movie: " + req.params.id)
-
-    MovieModel.findByIdAndDelete(req.params.id, (err, data) => {
+//Delete using ID
+app.delete('/api/shoes/:id', (req, res) => {
+    console.log("Delete Shoe: " + req.params.id)
+    ShoeModel.findByIdAndDelete(req.params.id, (err, data) => {
         res.send(data);
     })
 })
 
-app.post('/api/movies', (req, res) => {
-    console.log('Movie Recieved');
-    console.log(req.body.title);//parse movie info
-    console.log(req.body.year);
-    console.log(req.body.poster);
+app.post('/api/shoes', (req, res) => {
+    console.log('Shoe Recieved');
+    console.log(req.body.name);//parse shoe info
+    console.log(req.body.brand);//parse shoe info
+    console.log(req.body.price);
+    console.log(req.body.image);
 
-    MovieModel.create({
-        title: req.body.title,
-        year: req.body.year,
-        poster: req.body.poster
+    ShoeModel.create({ //Creating to DW with values
+        name: req.body.name,
+        price: req.body.price,
+        brand: req.body.brand,
+        image: req.body.image
     })
     res.send('Item Added')
 })
 
+//Getting everything for the build
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/../build/index.html'))
 })

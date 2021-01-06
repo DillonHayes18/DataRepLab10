@@ -1,40 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Header } from './components/header';
-import { Footer } from './components/footer';
 import { Navbar, Nav } from 'react-bootstrap';
-
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Create } from './components/create';
-import { Read } from './components/read';
-import { Content } from './components/content';
-import { Edit } from './components/edit';
-
+import { Display } from './components/display';
+import { Update } from './components/updateShoe';
+import { Home } from './components/home';
+import { AddShoe } from './components/addShoe';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
-
+        {/* NavBar Setup */}
           <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="#home">Navbar</Navbar.Brand>
             <Nav className="mr-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/read">Read</Nav.Link>
-              <Nav.Link href="/create">Create</Nav.Link>
+              <Navbar.Brand href="/">Home</Navbar.Brand>
+              <Nav.Link href="/display">Display Shoes</Nav.Link>
+              <Nav.Link href="/addShoe">Add Shoes</Nav.Link>
             </Nav>
           </Navbar>
 
           <br />
+          {/* Routing to pages */}
           <Switch>
-            <Route path='/' component={Content} exact />
-            <Route path='/create' component={Create} />
-            <Route path='/read' component={Read} />
-            <Route path='/edit/:id' component={Edit}></Route>
-
+            <Route path='/' component={Home} exact />
+            <Route path='/addShoe' component={AddShoe} />
+            <Route path='/display' component={Display} />
+            <Route path='/updateShoe/:id' component={Update}></Route> 
           </Switch>
         </div>
       </Router>
