@@ -4,16 +4,19 @@ const port = 4000
 const cors = require('cors')
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
+const path = require('path')
 
 app.use(cors());
-
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+//Setting up config frontend
+app.use(express.static(path.join(__dirname, '../build')))
+app.use('/static', express.static(path.join(__dirname, 'build//static')))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -69,27 +72,27 @@ app.get('/api/movies', (req, res) => {
     })
 })
 
-app.get('/api/movies/:id', (req, res)=> {
+app.get('/api/movies/:id', (req, res) => {
     console.log(req.params.id)
-    MovieModel.findById(req.params.id, (err, data) =>{
+    MovieModel.findById(req.params.id, (err, data) => {
         res.json(data)
     })
 })
 
-app.put('/api/movies/:id', (req, res)=>{
-    console.log("Update Movie:" +  req.params.id)
+app.put('/api/movies/:id', (req, res) => {
+    console.log("Update Movie:" + req.params.id)
     console.log(req.body)
 
-    MovieModel.findByIdAndUpdate(req.params.id, req.body, {new:true},
-        (err,data)=>{
+    MovieModel.findByIdAndUpdate(req.params.id, req.body, { new: true },
+        (err, data) => {
             res.send(data);
         })
 })
 
-app.delete('/api/movies/:id', (req, res) =>{
-    console.log("Delete Movie: " +req.params.id)
+app.delete('/api/movies/:id', (req, res) => {
+    console.log("Delete Movie: " + req.params.id)
 
-    MovieModel.findByIdAndDelete(req.params.id, (err,data) =>{
+    MovieModel.findByIdAndDelete(req.params.id, (err, data) => {
         res.send(data);
     })
 })
@@ -106,6 +109,10 @@ app.post('/api/movies', (req, res) => {
         poster: req.body.poster
     })
     res.send('Item Added')
+})
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/../build/index.html'))
 })
 
 app.listen(port, () => {
